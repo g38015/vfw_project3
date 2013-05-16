@@ -124,7 +124,7 @@ window.addEventListener("DOMContentLoaded", function() {
          editLink.href = "#";
          editLink.key = key;
          var editText = "Edit Lead";
-         //editLink.addEventListener("click", editItem);
+         editLink.addEventListener("click", editItem);
          editLink.innerHTML = editText;
          linkLi.appendChild(editLink);
          
@@ -138,12 +138,53 @@ window.addEventListener("DOMContentLoaded", function() {
          deleteLink.href = "#";
          deleteLink.key = key;
          var deleteText = "Delete Lead";
-         //deleteLink.addEventListener("click", deleteItem);
+         deleteLink.addEventListener("click", deleteItem);
          deleteLink.innerHTML = deleteText;
          linkLi.appendChild(deleteLink);
          
      
      }
+     
+     function deleteItem() {
+         var ask = confirm("Really?");
+         if (ask) {
+             localStorage.removeItem(this.key);
+             window.location.reload();
+         }else{
+             alert("Contact was not Deleted");
+         }
+     }
+     
+     
+     function editItem() {
+         // Grab Data from Local Storage
+         var value = localStorage.getItem(this.key);
+         var lead = JSON.parse(value);
+         
+         // Show Form
+         toggleLeads("off");
+     
+         // Populate Form Fields
+         $("name").value = lead.name[1];
+         $("phone").value = lead.phone[1];
+         $("email").value = lead.email[1];
+         $("date").value = lead.date[1];
+         $("price").value = lead.price[1];
+         $("bedrooms").value = lead.bedrooms[1];
+         $("additional").value = lead.info[1];
+         
+         // Remove Listener from Input
+         save.removeEventListener("click", storeLeads);
+         // Change Submit to Say Edit Button
+         $("submit").value = "Edit Lead"
+         var editSubmit = $("submit");
+         // Save the Key Value Established as a Property of the editSubmit event
+         editSubmit.addEventListener("click", validate);
+         editSubmit.key = this.key;
+         
+     }
+     
+     
      
      
      // This function clears all localstorage when delete leads is clicked or tapped
@@ -156,6 +197,10 @@ window.addEventListener("DOMContentLoaded", function() {
              window.location.reload();
              return false;
          }
+     }
+     
+     function validate() {
+     
      }
     
     

@@ -97,6 +97,7 @@ window.addEventListener("DOMContentLoaded", function() {
                  $("leads").style.display = "block";
                  for (var i = 0, len=localStorage.length; i<len; i++) {
                      var newLi = document.createElement("li");
+                     var linkLi = document.createElement("li")
                      newList.appendChild(newLi);
                      var key = localStorage.key(i);
                      var value = localStorage.getItem(key);
@@ -109,11 +110,42 @@ window.addEventListener("DOMContentLoaded", function() {
                          newSublist.appendChild(makeSubli);
                          var optSubText = obj[n][0]+" "+obj[n][1];
                          makeSubli.innerHTML = optSubText;
-                         
+                         newSublist.appendChild(linkLi);                         
                      }
+                     createItemLinks(localStorage.key(i), linkLi);
                  }
              } 
      }
+     
+     // Create Edit and Delete Links for Each Stored Lead when Displayed
+     function createItemLinks(key, linkLi) {
+         // Add Edit
+         var editLink = document.createElement("a");
+         editLink.href = "#";
+         editLink.key = key;
+         var editText = "Edit Lead";
+         //editLink.addEventListener("click", editItem);
+         editLink.innerHTML = editText;
+         linkLi.appendChild(editLink);
+         
+         // Add LineBreak
+         
+         var breakTag = document.createElement("br");
+         linkLi.appendChild(breakTag);
+         
+         // Add Delete
+         var deleteLink = document.createElement('a');
+         deleteLink.href = "#";
+         deleteLink.key = key;
+         var deleteText = "Delete Lead";
+         //deleteLink.addEventListener("click", deleteItem);
+         deleteLink.innerHTML = deleteText;
+         linkLi.appendChild(deleteLink);
+         
+     
+     }
+     
+     
      // This function clears all localstorage when delete leads is clicked or tapped
      function clearLeads() {
          if (localStorage.length === 0) {

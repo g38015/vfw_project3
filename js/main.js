@@ -29,15 +29,20 @@ window.addEventListener("DOMContentLoaded", function() {
 
      
      // Find value of selected checkbox (this function has issue of retuning all values it loops through only returns one value
-     function getCheckbox() {
+     /*function getCheckbox() {
          var checks = document.forms[0].type;
-         for (var i = 0; i < document.leadForm.type.length; i++) {
+         var selectedValues = [];
+         
+         for (var i = 0, j = checks.length; i < j; i++) {
              if(checks[i].checked) {
              propertyChecked = checks[i].value;
+             selectedValues.push(propertyChecked);
              
               }   
          }
-     }
+         
+         
+     }*/
      // Function toggles form, hides form once show leads is tapped or clicked.
      function toggleLeads(n) {
          switch(n) {
@@ -60,17 +65,23 @@ window.addEventListener("DOMContentLoaded", function() {
      }
      
      // This function stores leads into local storage
-     function storeLeads() {
+     function storeLeads(key) {
+     // if there is no key means brand new lead and need a new key
+     if(!key) {
          var id             = Math.floor(Math.random()*10000001);
+         }else {
+         // set the id to the existing key we are editing
+             id = key;
+         }
          // Get all form field values and store in object
          // Object properties contain array form label and input value
-         getCheckbox();
+         //getCheckbox();
          var lead           = {};
              lead.name      = ["Name:", $("name").value];
              lead.phone     = ["Phone:", $("phone").value];
              lead.email     = ["Email:", $("email").value];
              lead.date      = ["Date:", $("date").value];
-             lead.check     = ["Checked:", propertyChecked];
+             //lead.check     = ["Checked:", selectedValues];
              lead.price     = ["Price:", $("price").value];
              lead.bedrooms  = ["Bedrooms:", $("bedrooms").value];
              lead.info      = ["Info:", $("additional").value];
@@ -121,9 +132,10 @@ window.addEventListener("DOMContentLoaded", function() {
      function createItemLinks(key, linkLi) {
          // Add Edit
          var editLink = document.createElement("a");
+         editLink.setAttribute("id", "editLink");
          editLink.href = "#";
          editLink.key = key;
-         var editText = "Edit Lead";
+         var editText = "Edit";
          editLink.addEventListener("click", editItem);
          editLink.innerHTML = editText;
          linkLi.appendChild(editLink);
@@ -135,9 +147,10 @@ window.addEventListener("DOMContentLoaded", function() {
          
          // Add Delete
          var deleteLink = document.createElement('a');
+         deleteLink.setAttribute("id", "deleteLink");
          deleteLink.href = "#";
          deleteLink.key = key;
-         var deleteText = "Delete Lead";
+         var deleteText = "Delete";
          deleteLink.addEventListener("click", deleteItem);
          deleteLink.innerHTML = deleteText;
          linkLi.appendChild(deleteLink);
@@ -199,8 +212,55 @@ window.addEventListener("DOMContentLoaded", function() {
          }
      }
      
-     function validate() {
-     
+     function validate(e) {
+         // Define Elements we want to check
+         var getName = $('name');
+         var getEmail = $('email');
+         
+         // Reset Error Message
+         $('errors').innerHTML = "";
+         getName.style.border = "1px solid blue";
+         getEmail.style.border = "1px solid blue";
+         
+         
+         // Error Message
+         var messageAr =[];
+         
+         // Name Validation
+         if (getName.value === "") {
+             var getNameError = "Please enter your name";
+             getName.style.border = "1px solid blue";
+             messageAr.push(getNameError);
+             
+         }
+         
+         // Email Validation
+         var exp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+         if (!(exp.exec(getEmail.value))) {
+             var emailError = "Enter email address";
+             getEmail.style.border = "1px solid blue";
+             messageAr.push(emailError);
+ 
+         }
+         
+         // If errors display on screen
+         if (messageAr.length >= 1) {
+             for (var i = 0, j = messageAr.length; i < j; i++) {
+                 var txt = document.createElement('li');
+                 txt.innerHTML = messageAr[i];
+                 $('errors').appendChild(txt);
+                 
+             }
+             e.preventDefault();
+             return false;
+             
+         }else {
+             
+             // If validation passes save data. Send key value (came from edit data function)
+             // This key value was passed through editSubmit listener as a property.
+             storeLeads(this.key);
+         }
+        
      }
     
     
@@ -210,6 +270,7 @@ window.addEventListener("DOMContentLoaded", function() {
         ;
     makeBedrooms();
     
+    
 
     // Set Link and Submit Click Events
     var display = $("displayLink");
@@ -217,7 +278,7 @@ window.addEventListener("DOMContentLoaded", function() {
     var clear = $("clear");
     clear.addEventListener("click", clearLeads);
     var save = $("submit");
-    save.addEventListener("click", storeLeads);
+    save.addEventListener("click", validate);
 
 });
 

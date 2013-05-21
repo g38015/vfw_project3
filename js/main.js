@@ -93,6 +93,7 @@ window.addEventListener("DOMContentLoaded", function() {
          alert("Lead Has Been Saved!");
                       
      }
+     
      // This function gets the leads from localstorage and shows them
      function getLeads() {
          if (localStorage.length === 0) {
@@ -155,7 +156,6 @@ window.addEventListener("DOMContentLoaded", function() {
          deleteLink.innerHTML = deleteText;
          linkLi.appendChild(deleteLink);
          
-     
      }
      
      function deleteItem() {
@@ -197,9 +197,7 @@ window.addEventListener("DOMContentLoaded", function() {
          
      }
      
-     
-     
-     
+
      // This function clears all localstorage when delete leads is clicked or tapped
      function clearLeads() {
          if (localStorage.length === 0) {
@@ -221,7 +219,6 @@ window.addEventListener("DOMContentLoaded", function() {
          $('errors').innerHTML = "";
          getName.style.border = "1px solid blue";
          getEmail.style.border = "1px solid blue";
-         
          
          // Error Message
          var messageAr =[];
@@ -271,7 +268,6 @@ window.addEventListener("DOMContentLoaded", function() {
     makeBedrooms();
     
     
-
     // Set Link and Submit Click Events
     var display = $("displayLink");
     display.addEventListener("click", getLeads);

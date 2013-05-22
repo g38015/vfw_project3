@@ -29,20 +29,18 @@ window.addEventListener("DOMContentLoaded", function() {
 
      
      // Find value of selected checkbox (this function has issue of retuning all values it loops through only returns one value
-     /*function getCheckbox() {
-         var checks = document.forms[0].type;
-         var selectedValues = [];
-         
-         for (var i = 0, j = checks.length; i < j; i++) {
-             if(checks[i].checked) {
-             propertyChecked = checks[i].value;
-             selectedValues.push(propertyChecked);
-             
-              }   
-         }
-         
-         
-     }*/
+     function getCheckbox() {
+              var checks = document.forms[0].test;
+              for (var i = 0; i < document.leadForm.test.length; i++) {
+                  if(checks[i].checked) {
+                  propertyChecked = checks[i].value;
+                  
+                   }   
+              }
+          }
+     
+ 
+     
      // Function toggles form, hides form once show leads is tapped or clicked.
      function toggleLeads(n) {
          switch(n) {
@@ -69,19 +67,19 @@ window.addEventListener("DOMContentLoaded", function() {
      // if there is no key means brand new lead and need a new key
      if(!key) {
          var id             = Math.floor(Math.random()*10000001);
-         }else {
+     }else {
          // set the id to the existing key we are editing
              id = key;
          }
          // Get all form field values and store in object
          // Object properties contain array form label and input value
-         //getCheckbox();
+         getCheckbox();
          var lead           = {};
              lead.name      = ["Name:", $("name").value];
              lead.phone     = ["Phone:", $("phone").value];
              lead.email     = ["Email:", $("email").value];
              lead.date      = ["Date:", $("date").value];
-             //lead.check     = ["Checked:", selectedValues];
+             lead.check     = ["Checked:", propertyChecked];
              lead.price     = ["Price:", $("price").value];
              lead.bedrooms  = ["Bedrooms:", $("bedrooms").value];
              lead.info      = ["Info:", $("additional").value];
@@ -109,7 +107,7 @@ window.addEventListener("DOMContentLoaded", function() {
                  $("leads").style.display = "block";
                  for (var i = 0, len=localStorage.length; i<len; i++) {
                      var newLi = document.createElement("li");
-                     var linkLi = document.createElement("li")
+                     var linkLi = document.createElement("li");
                      newList.appendChild(newLi);
                      var key = localStorage.key(i);
                      var value = localStorage.getItem(key);
@@ -189,7 +187,7 @@ window.addEventListener("DOMContentLoaded", function() {
          // Remove Listener from Input
          save.removeEventListener("click", storeLeads);
          // Change Submit to Say Edit Button
-         $("submit").value = "Edit Lead"
+         $("submit").value = "Edit Lead";
          var editSubmit = $("submit");
          // Save the Key Value Established as a Property of the editSubmit event
          editSubmit.addEventListener("click", validate);
@@ -256,6 +254,7 @@ window.addEventListener("DOMContentLoaded", function() {
              // If validation passes save data. Send key value (came from edit data function)
              // This key value was passed through editSubmit listener as a property.
              storeLeads(this.key);
+             
          }
         
      }

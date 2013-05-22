@@ -212,3 +212,7 @@ textarea {
     bottom: 24px;
 }
 
+#errors {
+    color: red;
+}
+

@@ -31,12 +31,15 @@ window.addEventListener("DOMContentLoaded", function() {
      // Find value of selected checkbox (this function has issue of retuning all values it loops through only returns one value
      function getCheckbox() {
               var checks = document.forms[0].test;
-              for (var i = 0; i < document.leadForm.test.length; i++) {
+              var selectedCheckboxes = [];
+              for (var i = 0, j=checks.length; i < j; i++) {
                   if(checks[i].checked) {
-                  propertyChecked = checks[i].value;
+                  var propertyChecked = checks[i].value;
+                  selectedCheckboxes.push(propertyChecked);
                   
                    }   
               }
+              //localStorage.setItem("test", JSON.stringify(selectedCheckboxes));
           }
      
  
@@ -79,7 +82,7 @@ window.addEventListener("DOMContentLoaded", function() {
              lead.phone     = ["Phone:", $("phone").value];
              lead.email     = ["Email:", $("email").value];
              lead.date      = ["Date:", $("date").value];
-             lead.check     = ["Checked:", propertyChecked];
+             lead.check     = ["Checked:", selectedCheckboxes];
              lead.price     = ["Price:", $("price").value];
              lead.bedrooms  = ["Bedrooms:", $("bedrooms").value];
              lead.info      = ["Info:", $("additional").value];
@@ -215,8 +218,8 @@ window.addEventListener("DOMContentLoaded", function() {
          
          // Reset Error Message
          $('errors').innerHTML = "";
-         getName.style.border = "1px solid blue";
-         getEmail.style.border = "1px solid blue";
+         getName.style.border = "1px solid red";
+         getEmail.style.border = "1px solid red";
          
          // Error Message
          var messageAr =[];
@@ -224,7 +227,7 @@ window.addEventListener("DOMContentLoaded", function() {
          // Name Validation
          if (getName.value === "") {
              var getNameError = "Please enter your name";
-             getName.style.border = "1px solid blue";
+             getName.style.border = "1px solid red";
              messageAr.push(getNameError);
              
          }
@@ -233,9 +236,9 @@ window.addEventListener("DOMContentLoaded", function() {
          var exp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
          if (!(exp.exec(getEmail.value))) {
              var emailError = "Enter email address";
-             getEmail.style.border = "1px solid blue";
+             getEmail.style.border = "1px solid red";
              messageAr.push(emailError);
- 
+             
          }
          
          // If errors display on screen
@@ -256,13 +259,12 @@ window.addEventListener("DOMContentLoaded", function() {
              storeLeads(this.key);
              
          }
-        
      }
-    
     
     // Var Defaults
     var numberOfBedrooms = ["1+", "2+", "3+"],
-        propertyChecked
+        propertyChecked,
+        selectedCheckboxes
         ;
     makeBedrooms();
     

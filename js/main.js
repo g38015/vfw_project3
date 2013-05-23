@@ -31,18 +31,16 @@ window.addEventListener("DOMContentLoaded", function() {
      // Find value of selected checkbox (this function has issue of retuning all values it loops through only returns one value
      function getCheckbox() {
               var checks = document.forms[0].test;
-              var selectedCheckboxes = [];
+              //var selectedCheckboxes = [];
               for (var i = 0, j=checks.length; i < j; i++) {
                   if(checks[i].checked) {
                   var propertyChecked = checks[i].value;
                   selectedCheckboxes.push(propertyChecked);
                   
-                   }   
+                  }   
               }
-              //localStorage.setItem("test", JSON.stringify(selectedCheckboxes));
-          }
-     
- 
+              //return selectedCheckboxes;
+      }
      
      // Function toggles form, hides form once show leads is tapped or clicked.
      function toggleLeads(n) {
@@ -69,8 +67,10 @@ window.addEventListener("DOMContentLoaded", function() {
      function storeLeads(key) {
      // if there is no key means brand new lead and need a new key
      if(!key) {
+     
          var id             = Math.floor(Math.random()*10000001);
-     }else {
+         
+     }else{
          // set the id to the existing key we are editing
              id = key;
          }
@@ -119,58 +119,57 @@ window.addEventListener("DOMContentLoaded", function() {
                      var newSublist = document.createElement("ul");
                      newLi.appendChild(newSublist);
                      for (var n in obj) {
-                         var makeSubli =document.createElement("li");
-                         newSublist.appendChild(makeSubli);
+                         var makeNewSubli =document.createElement("li");
+                         newSublist.appendChild(makeNewSubli);
                          var optSubText = obj[n][0]+" "+obj[n][1];
-                         makeSubli.innerHTML = optSubText;
+                         makeNewSubli.innerHTML = optSubText;
                          newSublist.appendChild(linkLi);                         
                      }
-                     createItemLinks(localStorage.key(i), linkLi);
+                     createLeadLinks(localStorage.key(i), linkLi);
                  }
              } 
      }
      
      // Create Edit and Delete Links for Each Stored Lead when Displayed
-     function createItemLinks(key, linkLi) {
+     function createLeadLinks(key, linkLi) {
          // Add Edit
-         var editLink = document.createElement("a");
-         editLink.setAttribute("id", "editLink");
-         editLink.href = "#";
-         editLink.key = key;
+         var editLead = document.createElement("a");
+         editLead.setAttribute("id", "editLead");
+         editLead.href = "#";
+         editLead.key = key;
          var editText = "Edit";
-         editLink.addEventListener("click", editItem);
-         editLink.innerHTML = editText;
-         linkLi.appendChild(editLink);
+         editLead.addEventListener("click", editSingleLead);
+         editLead.innerHTML = editText;
+         linkLi.appendChild(editLead);
          
          // Add LineBreak
-         
-         var breakTag = document.createElement("br");
-         linkLi.appendChild(breakTag);
+         var breakLine = document.createElement("br");
+         linkLi.appendChild(breakLine);
          
          // Add Delete
-         var deleteLink = document.createElement('a');
-         deleteLink.setAttribute("id", "deleteLink");
-         deleteLink.href = "#";
-         deleteLink.key = key;
+         var deleteLead = document.createElement('a');
+         deleteLead.setAttribute("id", "deleteLead");
+         deleteLead.href = "#";
+         deleteLead.key = key;
          var deleteText = "Delete";
-         deleteLink.addEventListener("click", deleteItem);
-         deleteLink.innerHTML = deleteText;
-         linkLi.appendChild(deleteLink);
+         deleteLead.addEventListener("click", deleteSingleLead);
+         deleteLead.innerHTML = deleteText;
+         linkLi.appendChild(deleteLead);
          
      }
      
-     function deleteItem() {
-         var ask = confirm("Really?");
+     function deleteSingleLead() {
+         var ask = confirm("Really? Are You Sure?");
          if (ask) {
              localStorage.removeItem(this.key);
              window.location.reload();
          }else{
-             alert("Contact was not Deleted");
+             alert("Your Lead was not Deleted");
          }
      }
      
      
-     function editItem() {
+     function editSingleLead() {
          // Grab Data from Local Storage
          var value = localStorage.getItem(this.key);
          var lead = JSON.parse(value);
@@ -191,14 +190,13 @@ window.addEventListener("DOMContentLoaded", function() {
          save.removeEventListener("click", storeLeads);
          // Change Submit to Say Edit Button
          $("submit").value = "Edit Lead";
-         var editSubmit = $("submit");
+         var editSubmitButton = $("submit");
          // Save the Key Value Established as a Property of the editSubmit event
-         editSubmit.addEventListener("click", validate);
-         editSubmit.key = this.key;
+         editSubmitButton.addEventListener("click", validation);
+         editSubmitButton.key = this.key;
          
      }
      
-
      // This function clears all localstorage when delete leads is clicked or tapped
      function clearLeads() {
          if (localStorage.length === 0) {
@@ -211,32 +209,32 @@ window.addEventListener("DOMContentLoaded", function() {
          }
      }
      
-     function validate(e) {
+     function validation(arg) {
          // Define Elements we want to check
-         var getName = $('name');
-         var getEmail = $('email');
+         var validateName = $('name');
+         var validateEmail = $('email');
          
          // Reset Error Message
          $('errors').innerHTML = "";
-         getName.style.border = "1px solid red";
-         getEmail.style.border = "1px solid red";
+         validateName.style.border = "2px solid blue";
+         validateEmail.style.border = "2px solid blue";
          
          // Error Message
          var messageAr =[];
          
          // Name Validation
-         if (getName.value === "") {
-             var getNameError = "Please enter your name";
-             getName.style.border = "1px solid red";
-             messageAr.push(getNameError);
+         if (validateName.value === "") {
+             var validateNameError = "Please enter your name";
+             validateName.style.border = "2px solid blue";
+             messageAr.push(validateNameError);
              
          }
          
          // Email Validation
-         var exp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-         if (!(exp.exec(getEmail.value))) {
+         var express = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+         if (!(express.exec(validateEmail.value))) {
              var emailError = "Enter email address";
-             getEmail.style.border = "1px solid red";
+             validateEmail.style.border = "2px solid blue";
              messageAr.push(emailError);
              
          }
@@ -249,7 +247,7 @@ window.addEventListener("DOMContentLoaded", function() {
                  $('errors').appendChild(txt);
                  
              }
-             e.preventDefault();
+             arg.preventDefault();
              return false;
              
          }else {
@@ -257,14 +255,12 @@ window.addEventListener("DOMContentLoaded", function() {
              // If validation passes save data. Send key value (came from edit data function)
              // This key value was passed through editSubmit listener as a property.
              storeLeads(this.key);
-             
          }
      }
     
     // Var Defaults
     var numberOfBedrooms = ["1+", "2+", "3+"],
-        propertyChecked,
-        selectedCheckboxes
+        selectedCheckboxes = []
         ;
     makeBedrooms();
     
@@ -275,7 +271,7 @@ window.addEventListener("DOMContentLoaded", function() {
     var clear = $("clear");
     clear.addEventListener("click", clearLeads);
     var save = $("submit");
-    save.addEventListener("click", validate);
+    save.addEventListener("click", validation);
 
 });
 

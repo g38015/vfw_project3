@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", function() {
      
      // Find value of selected checkbox (this function has issue of retuning all values it loops through only returns one value
      function getCheckbox() {
-              var checks = document.forms[0].test;
+              var checks = document.forms[0].type;
               //var selectedCheckboxes = [];
               for (var i = 0, j=checks.length; i < j; i++) {
                   if(checks[i].checked) {
@@ -185,7 +185,22 @@ window.addEventListener("DOMContentLoaded", function() {
          $("price").value = lead.price[1];
          $("bedrooms").value = lead.bedrooms[1];
          $("additional").value = lead.info[1];
+                  
+         // Checkboxes
+         var checkbox = document.forms[0].type;
+         var key = localStorage.key(selectedCheckboxes);
+         var typeCheck = JSON.parse(value);  
+         for (var i = 0; i < checkbox.length; i++) {
+             console.log("display 3 times looped 3 checkboxes");
+             for (var j = 0; i < typeCheck.length; j++) {
+                 if (checkbox[i].value === typeCheck[j]) {
+                     checkbox[i].setAttribute("checked", "checked")
+                     
+                 }
+             }
+         }
          
+     
          // Remove Listener from Input
          save.removeEventListener("click", storeLeads);
          // Change Submit to Say Edit Button
@@ -250,7 +265,7 @@ window.addEventListener("DOMContentLoaded", function() {
              arg.preventDefault();
              return false;
              
-         }else {
+         }else{
              
              // If validation passes save data. Send key value (came from edit data function)
              // This key value was passed through editSubmit listener as a property.
